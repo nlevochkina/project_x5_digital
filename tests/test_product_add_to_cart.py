@@ -16,3 +16,5 @@ def test_product_add_to_cart(main_page, search_page, card_page, open_browser):
 
     with allure.step('Step 4. Добавляем товар в корзину'):
         card_page.add_to_cart()
+        with allure.step('Открылось окно с заполнением адреса для доставки'):
+            card_page.fill_adress()
