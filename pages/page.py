@@ -40,4 +40,3 @@ class Page:
 
     def check_active_button_send_code(self):
         browser.element('.submit-button.btn.btn-primary').should(be.visible)
-

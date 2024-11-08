@@ -29,7 +29,7 @@ def load_env():
     load_dotenv()
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope='function', autouse=True)
 def setup_browser(request):
     browser_version = request.config.getoption('--browser_version') or DEFAULT_BROWSER_VERSION
     is_run_locally = request.config.getoption('--run_local') == 'true'
@@ -38,20 +38,20 @@ def setup_browser(request):
     if is_run_locally:
         driver = webdriver.Chrome(options=options)
     else:
-        options.set_capability("browserName", "chrome")
-        options.set_capability("browserVersion", browser_version)
+        options.set_capability('browserName', 'chrome')
+        options.set_capability('browserVersion', browser_version)
         options.page_load_strategy = 'eager'
-        options.set_capability("selenoid:options", {
-            "enableVNC": True,
-            "enableVideo": True
+        options.set_capability('selenoid:options', {
+            'enableVNC': True,
+            'enableVideo': True
         })
 
-        browser.config.driver_name = "chrome"
+        browser.config.driver_name = 'chrome'
 
         selenoid_login = os.getenv('SELENOID_LOGIN')
         selenoid_password = os.getenv('SELENOID_PASSWORD')
         driver = webdriver.Remote(
-            command_executor=f"https://{selenoid_login}:{selenoid_password}@selenoid.autotests.cloud/wd/hub",
+            command_executor=f'https://{selenoid_login}:{selenoid_password}@selenoid.autotests.cloud/wd/hub',
             options=options
         )
 
