@@ -5,10 +5,7 @@ from dotenv import load_dotenv
 from selene import browser
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from pages.main_page import MainPage
-from pages.search_page import SearchPage
-from pages.card_page import CardPage
-from pages.authorization_page import AuthorizationPage
+from pages.page import Page
 
 from utils import attach
 
@@ -18,7 +15,7 @@ DEFAULT_BROWSER_VERSION = '100.0'
 def pytest_addoption(parser):
     parser.addoption(
         '--browser_version',
-        default='100.0'
+        default=DEFAULT_BROWSER_VERSION
     )
 
 
@@ -26,31 +23,36 @@ def pytest_addoption(parser):
 def load_env():
     load_dotenv()
 
-
 @pytest.fixture(scope="function", autouse=True)
 def setup_browser(request):
     browser_version = request.config.getoption('--browser_version')
     browser_version = browser_version if browser_version != '' else DEFAULT_BROWSER_VERSION
     options = Options()
-    selenoid_capabilities = {
-        "browserName": "chrome",
-        "browserVersion": browser_version,
-        "selenoid:options": {
-            "enableVNC": True,
-            "enableVideo": True
+    is_run_locally = request.config.getoption('--run_local')
+    # is_run_locally = request.config.getoption('--run_locally')
+
+    if is_run_locally:
+        driver = webdriver.Chrome()
+    else:
+        selenoid_capabilities = {
+            "browserName": "chrome",
+            "browserVersion": browser_version,
+            "selenoid:options": {
+                "enableVNC": True,
+                "enableVideo": True
+            }
         }
-    }
-    options.capabilities.update(selenoid_capabilities)
+        options.capabilities.update(selenoid_capabilities)
 
-    login = os.getenv('LOGIN')
-    password = os.getenv('PASSWORD')
-    driver = webdriver.Remote(
-        command_executor=f"https://{login}:{password}@selenoid.autotests.cloud/wd/hub",
-        options=options
-    )
-    browser.config.driver = driver
+        browser.config.driver_name = "chrome"
 
-    browser.config.driver_name = "chrome"
+        selenoid_login = os.getenv('LOGIN')
+        selenoid_password = os.getenv('PASSWORD')
+        driver = webdriver.Remote(
+            command_executor=f"https://{selenoid_login}:{selenoid_password}@selenoid.autotests.cloud/wd/hub",
+            options=options
+        )
+        browser.config.driver = driver
 
     yield
 
@@ -63,27 +65,9 @@ def setup_browser(request):
 
 
 @pytest.fixture(scope='function')
-def main_page():
-    main_page = MainPage()
-    return main_page
-
-
-@pytest.fixture(scope='function')
-def search_page():
-    search_page = SearchPage()
-    return search_page
-
-
-@pytest.fixture(scope='function')
-def card_page():
-    card_page = CardPage()
-    return card_page
-
-
-@pytest.fixture(scope='function')
-def authorization_page():
-    authorization_page = AuthorizationPage()
-    return authorization_page
+def page():
+    page = Page()
+    return page
 
 
 @pytest.fixture(scope='function')
@@ -95,4 +79,3 @@ def open_browser(setup_browser):
     driver_options.page_load_strategy = 'eager'
     browser.config.driver_options = driver_options
     browser.open('https://www.perekrestok.ru')
-
