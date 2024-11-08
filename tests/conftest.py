@@ -40,6 +40,7 @@ def setup_browser(request):
     else:
         options.set_capability("browserName", "chrome")
         options.set_capability("browserVersion", browser_version)
+        options.page_load_strategy = 'eager'
         options.set_capability("selenoid:options", {
             "enableVNC": True,
             "enableVideo": True
@@ -76,7 +77,4 @@ def open_browser(setup_browser):
     browser.config.timeout = 15000
     browser.config.window_height = 1080
     browser.config.window_width = 1920
-    driver_options = webdriver.ChromeOptions()
-    driver_options.page_load_strategy = 'eager'
-    browser.config.driver_options = driver_options
-    browser.open('https://www.perekrestok.ru')
+    browser.open('https://www.perekrestok.ru/')

@@ -1,4 +1,4 @@
-from datetime import time
+import time
 
 from selene import browser, be
 
