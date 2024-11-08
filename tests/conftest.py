@@ -14,6 +14,11 @@ DEFAULT_BROWSER_VERSION = '100.0'
 
 def pytest_addoption(parser):
     parser.addoption(
+        '--run_local',
+        action='store',
+        default='false'
+    )
+    parser.addoption(
         '--browser_version',
         default=DEFAULT_BROWSER_VERSION
     )
@@ -23,38 +28,34 @@ def pytest_addoption(parser):
 def load_env():
     load_dotenv()
 
+
 @pytest.fixture(scope="function", autouse=True)
 def setup_browser(request):
-    browser_version = request.config.getoption('--browser_version')
-    browser_version = browser_version if browser_version != '' else DEFAULT_BROWSER_VERSION
+    browser_version = request.config.getoption('--browser_version') or DEFAULT_BROWSER_VERSION
+    is_run_locally = request.config.getoption('--run_local') == 'true'
     options = Options()
-    is_run_locally = request.config.getoption('--run_local')
-    # is_run_locally = request.config.getoption('--run_locally')
 
     if is_run_locally:
-        driver = webdriver.Chrome()
+        driver = webdriver.Chrome(options=options)
     else:
-        selenoid_capabilities = {
-            "browserName": "chrome",
-            "browserVersion": browser_version,
-            "selenoid:options": {
-                "enableVNC": True,
-                "enableVideo": True
-            }
-        }
-        options.capabilities.update(selenoid_capabilities)
+        options.set_capability("browserName", "chrome")
+        options.set_capability("browserVersion", browser_version)
+        options.set_capability("selenoid:options", {
+            "enableVNC": True,
+            "enableVideo": True
+        })
 
         browser.config.driver_name = "chrome"
 
-        selenoid_login = os.getenv('LOGIN')
-        selenoid_password = os.getenv('PASSWORD')
+        selenoid_login = os.getenv('SELENOID_LOGIN')
+        selenoid_password = os.getenv('SELENOID_PASSWORD')
         driver = webdriver.Remote(
             command_executor=f"https://{selenoid_login}:{selenoid_password}@selenoid.autotests.cloud/wd/hub",
             options=options
         )
-        browser.config.driver = driver
 
-    yield
+    browser.config.driver = driver
+    yield browser
 
     attach.add_screenshot(browser)
     attach.add_logs(browser)
@@ -72,7 +73,7 @@ def page():
 
 @pytest.fixture(scope='function')
 def open_browser(setup_browser):
-    browser.config.timeout = 12000
+    browser.config.timeout = 15000
     browser.config.window_height = 1080
     browser.config.window_width = 1920
     driver_options = webdriver.ChromeOptions()

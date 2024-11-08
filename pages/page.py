@@ -6,13 +6,13 @@ from selene import browser, be
 class Page:
 
     def do_search(self, value):
-        browser.element('.lazyload-wrapper .section__top .products-slider__title').should(be.visible)
-        browser.element(".Input__InputStyled-sc-1kqlv3u-0[name='search']").click()
-        browser.element(".Input__InputStyled-sc-1kqlv3u-0[name='search']").should(be.blank).type(value)
+        browser.element('.products-slider__title').should(be.visible)
+        browser.element("[name='search']").click()
+        browser.element("[name='search']").should(be.blank).type(value)
         browser.element("button[type='submit']").press_enter()
 
     def open_profile(self):
-        browser.element('a[href="/profile"].sc-eCstlR.jeYPke').click()
+        browser.element('a[href="/profile"]').click()
 
     def check_product(self, value):
         browser.driver.implicitly_wait(20)
@@ -29,10 +29,10 @@ class Page:
         browser.element('.delivery-modal__content-container').click()
 
     def create_account(self):
-        browser.element('.sc-eCstlR.gPywZE.login-x5__button.primary').click()
+        browser.element('.login-x5__button.primary').click()
 
     def check_inactive_button_send_code(self):
-        browser.element('.submit-button.btn.btn-primary.disabled-submit').should(be.visible)
+        browser.element('.btn-primary.disabled-submit').should(be.visible)
 
     def fill_phone(self, value):
         browser.element('.input').clear()
