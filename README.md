@@ -38,7 +38,7 @@
 
 <img src="/media/configure.png">
 
-Автотесты в Jenkins нужно нажать на Build Now
+Для запуска автотестов в Jenkins нужно нажать на Build Now
 
 <img src="/media/build.png">
 
