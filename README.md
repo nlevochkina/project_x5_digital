@@ -3,8 +3,6 @@
 
 Занимаюсь ручным и автоматизированным тестированием
 
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=nlevochkina)
-
 ### Языки и инструменты:
 
 | Python                                                     | Pycharm                                                     | GitHub                                                     | Selenium                                                     | Allure                                                     | Jenkins                                                     |                                                  
