@@ -9,8 +9,6 @@ from pages.page import Page
 
 from utils import attach
 
-DEFAULT_BROWSER_VERSION = '100.0'
-
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -20,7 +18,7 @@ def pytest_addoption(parser):
     )
     parser.addoption(
         '--browser_version',
-        default=DEFAULT_BROWSER_VERSION
+        default='100.0'
     )
 
 
@@ -31,7 +29,7 @@ def load_env():
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_browser(request):
-    browser_version = request.config.getoption('--browser_version') or DEFAULT_BROWSER_VERSION
+    browser_version = request.config.getoption('--browser_version')
     is_run_locally = request.config.getoption('--run_local') == 'true'
     options = Options()
 
@@ -64,12 +62,6 @@ def setup_browser(request):
     attach.add_video(browser)
 
     browser.quit()
-
-
-@pytest.fixture(scope='function')
-def page():
-    page = Page()
-    return page
 
 
 @pytest.fixture(scope='function')

@@ -1,8 +1,12 @@
 import allure
 
+from pages.page import Page
+
+page = Page()
+
 
 @allure.title('Добавляем товар в корзину')
-def test_product_add_to_cart(page, open_browser):
+def test_product_add_to_cart(open_browser):
     """Открываем сайт магазина Перекрёсток"""
 
     with allure.step('Step 1. Выполняем поиск товара'):

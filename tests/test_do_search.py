@@ -1,8 +1,12 @@
 import allure
 
+from pages.page import Page
+
+page = Page()
+
 
 @allure.title('Выполнение поиска товара')
-def test_search_product(page, open_browser):
+def test_search_product(open_browser):
     """Открываем сайт магазина Перекрёсток"""
 
     with allure.step('Step 1. Выполняем поиск товара'):

@@ -14,11 +14,12 @@
 
 <a href="https://github.com/nlevochkina/project_x5_digital"> Проект для X5 Digital
 
+Тесты написаны с использованием фреймворка Pytest.
 В автотестах реализованы кейсы поиска, добавления товар в корзину и заполнения номера телефона при авторизации
 
 **Настроен телеграм-бот для отправки allure-report:**
 
-<img src="/media/telegrambot.png">
+<img src="/media/tbot.png">
 
 ### Allure
 

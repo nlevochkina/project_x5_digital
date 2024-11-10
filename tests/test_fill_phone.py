@@ -1,8 +1,12 @@
 import allure
 
+from pages.page import Page
+
+page = Page()
+
 
 @allure.title('Заполняем поле телефон на экране авторизации')
-def test_fill_phone(page, open_browser):
+def test_fill_phone(open_browser):
     """Открываем сайт магазина Перекрёсток"""
 
     with allure.step('Step 1. Открываем страницу авторизации'):
